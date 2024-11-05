@@ -1,0 +1,65 @@
+<meta name='viewport' content='width=device-width, initial-scale=1'/><!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Telegram Mini App Oyunu</title>
+    <style>
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            background-color: #FFFFFF;
+            font-family: Arial, sans-serif;
+        }
+        #game-container {
+            text-align: center;
+            padding: 20px;
+            background-color: white;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+        }
+        #score {
+            font-size: 20px;
+            margin-bottom: 20px;
+        }
+        button {
+            padding: 10px 20px;
+            font-size: 16px;
+            cursor: pointer;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 4px;
+        }
+    </style>
+</head>
+<body>
+    <div id="game-container">
+        <h2>topla</h2>
+        <p id="score">Toplam Puan: 0</p>
+        <button onclick="collectScore()">Puan Topla</button>
+    </div>
+
+    <script src="https://telegram.org/js/telegram-web-app.js"></script>
+    <script>
+        let score = 0;
+
+        function collectScore() {
+            const randomScore = Math.floor(Math.random() * 10) + 1; // 1 ile 10 arasında puan
+            score += randomScore;
+            document.getElementById("score").innerText = `Toplam Puan: ${score}`;
+            
+            // Telegram bot'a JSON formatında veri gönder
+            Telegram.WebApp.sendData(JSON.stringify({ type: "puan", puan: score }));
+        }
+
+        // Mini App açıldığında Telegram uygulamasının yüksekliğine uyum sağla
+        Telegram.WebApp.onEvent("viewportChanged", (event) => {
+            document.body.style.height = `${event.height}px`;
+        });
+    </script>
+</body>
+</html>
